@@ -1,0 +1,85 @@
+.App {
+  text-align: center;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.auth-container {
+  max-width: 400px;
+  margin: 100px auto;
+  padding: 30px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.users-container {
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  margin: 20px 0;
+}
+
+.table-container {
+  margin-top: 20px;
+}
+
+.search-container {
+  margin-bottom: 20px;
+}
+
+.action-buttons {
+  margin-bottom: 20px;
+}
+
+.btn-group {
+  margin-right: 10px;
+}
+
+.table th {
+  background-color: #f8f9fa;
+  border-top: none;
+}
+
+.form-control:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.alert {
+  margin-bottom: 20px;
+}
+
+.loading {
+  text-align: center;
+  padding: 50px;
+}
+
+.error {
+  color: #dc3545;
+  margin-top: 10px;
+}
+
+.success {
+  color: #28a745;
+  margin-top: 10px;
+}
+
+.navbar {
+  margin-bottom: 30px;
+}
+
+.modal-header {
+  background-color: #f8f9fa;
+}
+
+.form-label {
+  font-weight: 500;
+} 
