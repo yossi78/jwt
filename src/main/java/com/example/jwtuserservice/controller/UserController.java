@@ -16,7 +16,8 @@ import java.util.List;
 @RequestMapping("/api/users")
 @CrossOrigin(origins = "*")
 public class UserController {
-    
+
+    // Test
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     
     @Autowired
