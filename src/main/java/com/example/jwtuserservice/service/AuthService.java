@@ -50,6 +50,29 @@ public class AuthService {
         logger.info("Authenticating user: {}", authRequest.getUsername());
         
         try {
+            // Check if user exists first
+            boolean userExists = loginRepository.existsByUsername(authRequest.getUsername());
+            logger.info("User exists in database: {}", userExists);
+            
+            if (!userExists) {
+                logger.error("User not found: {}", authRequest.getUsername());
+                throw new RuntimeException("Invalid username or password");
+            }
+            
+            // Get user details to verify password
+            Login login = loginRepository.findByUsername(authRequest.getUsername()).orElse(null);
+            if (login != null) {
+                logger.info("Found login record for user: {}", authRequest.getUsername());
+                boolean passwordMatches = passwordEncoder.matches(authRequest.getPassword(), login.getPassword());
+                logger.info("Password matches: {}", passwordMatches);
+                
+                if (!passwordMatches) {
+                    logger.error("Password does not match for user: {}", authRequest.getUsername());
+                    throw new RuntimeException("Invalid username or password");
+                }
+            }
+            
+            // Use Spring Security's authentication manager
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
             );
@@ -128,6 +151,34 @@ public class AuthService {
         } catch (Exception e) {
             logger.error("Token refresh failed", e);
             throw new RuntimeException("Invalid refresh token");
+        }
+    }
+    
+    public void signOut(String accessToken) {
+        logger.info("Signing out user");
+        
+        try {
+            if (!jwtUtil.isAccessToken(accessToken)) {
+                throw new RuntimeException("Invalid access token");
+            }
+            
+            String username = jwtUtil.extractUsername(accessToken);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            
+            if (jwtUtil.validateToken(accessToken, userDetails)) {
+                // In a more sophisticated implementation, you might want to:
+                // 1. Add the token to a blacklist
+                // 2. Store the token in Redis with an expiration
+                // 3. Track active sessions
+                
+                logger.info("User signed out successfully: {}", username);
+            } else {
+                throw new RuntimeException("Invalid access token");
+            }
+            
+        } catch (Exception e) {
+            logger.error("Sign out failed", e);
+            throw new RuntimeException("Invalid access token");
         }
     }
 } 

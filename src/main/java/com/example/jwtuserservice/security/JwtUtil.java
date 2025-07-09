@@ -86,7 +86,13 @@ public class JwtUtil {
     public Boolean validateToken(String token, UserDetails userDetails) {
         try {
             final String username = extractUsername(token);
-            return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+            boolean usernameMatch = username.equals(userDetails.getUsername());
+            boolean notExpired = !isTokenExpired(token);
+            
+            logger.debug("Token validation - Username match: {}, Token expired: {}", usernameMatch, !notExpired);
+            logger.debug("Token username: {}, UserDetails username: {}", username, userDetails.getUsername());
+            
+            return (usernameMatch && notExpired);
         } catch (JwtException e) {
             logger.error("Token validation failed: {}", e.getMessage());
             return false;
@@ -97,6 +103,17 @@ public class JwtUtil {
         try {
             Claims claims = extractAllClaims(token);
             return "refresh".equals(claims.get("type"));
+        } catch (JwtException e) {
+            logger.error("Error checking token type: {}", e.getMessage());
+            return false;
+        }
+    }
+    
+    public Boolean isAccessToken(String token) {
+        try {
+            Claims claims = extractAllClaims(token);
+            // Access tokens don't have a "type" claim, so if it's not a refresh token, it's an access token
+            return !"refresh".equals(claims.get("type"));
         } catch (JwtException e) {
             logger.error("Error checking token type: {}", e.getMessage());
             return false;

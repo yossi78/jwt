@@ -9,4 +9,5 @@ public class JwtUserServiceApplication {
     public static void main(String[] args) {
         SpringApplication.run(JwtUserServiceApplication.class, args);
     }
+
 } 

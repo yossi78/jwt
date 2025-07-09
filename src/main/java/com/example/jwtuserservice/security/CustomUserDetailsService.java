@@ -24,12 +24,20 @@ public class CustomUserDetailsService implements UserDetailsService {
     
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        logger.debug("Loading user by username: {}", username);
+        logger.info("Loading user by username: {}", username);
         
-        Login login = loginRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
-        
-        return new User(login.getUsername(), login.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority("USER")));
+        try {
+            Login login = loginRepository.findByUsername(username)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+            
+            logger.info("User found in database: {}", username);
+            logger.debug("User password hash: {}", login.getPassword());
+            
+            return new User(login.getUsername(), login.getPassword(),
+                    Collections.singletonList(new SimpleGrantedAuthority("USER")));
+        } catch (Exception e) {
+            logger.error("Error loading user by username: {}", username, e);
+            throw e;
+        }
     }
 } 

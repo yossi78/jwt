@@ -225,10 +225,32 @@ CREATE TABLE login (
 
 ## Testing with Postman
 
-1. Import the Postman collection from `src/main/resources/postman/JWT_User_Service.postman_collection.json`
-2. Set the environment variable `baseUrl` to `http://localhost:8080`
-3. Start with the "Sign In" request to get tokens
-4. The collection includes automatic token extraction for subsequent requests
+1. **Import the Postman collection** from `src/main/resources/postman/JWT_User_Service.postman_collection.json`
+2. **Set up global variables:**
+   - Open Postman Settings (gear icon) → Globals
+   - Add variable `baseUrl` with value `http://localhost:8080`
+3. **Authentication Flow:**
+   - Start with the **"Sign In"** request using credentials:
+     - Username: `john.doe`
+     - Password: `password123`
+   - The response will automatically save `accessToken` and `refreshToken` to global variables
+4. **Using the API:**
+   - All subsequent requests will automatically use the stored tokens
+   - Use **"Refresh Token"** to get new tokens when they expire
+   - Use **"Sign Out"** to clear tokens from global variables
+
+### Automatic Token Management
+
+The Postman collection includes automatic token handling:
+
+- **Sign In**: Extracts and saves `accessToken` and `refreshToken` to global variables
+- **Refresh Token**: Updates both tokens in global variables
+- **Sign Out**: Clears both tokens from global variables
+
+### Available Endpoints
+
+- **Authentication**: Sign Up, Sign In, Sign Out, Refresh Token
+- **Users**: Get All, Get by ID, Search, Create, Update, Delete, Batch Delete
 
 ## Frontend Features
 

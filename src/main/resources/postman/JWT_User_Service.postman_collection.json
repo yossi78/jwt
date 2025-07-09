@@ -63,6 +63,28 @@
 							]
 						}
 					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Extract tokens from Sign In response and save to global variables",
+									"if (pm.response.code === 200 || pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.accessToken) {",
+									"        pm.globals.set('accessToken', response.accessToken);",
+									"        console.log('Access token saved to global variables');",
+									"    }",
+									"    if (response.refreshToken) {",
+									"        pm.globals.set('refreshToken', response.refreshToken);",
+									"        console.log('Refresh token saved to global variables');",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"response": []
 				},
 				{
@@ -87,6 +109,68 @@
 							]
 						}
 					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Extract tokens from Refresh Token response and save to global variables",
+									"if (pm.response.code === 200 || pm.response.code === 201) {",
+									"    const response = pm.response.json();",
+									"    if (response.accessToken) {",
+									"        pm.globals.set('accessToken', response.accessToken);",
+									"        console.log('New access token saved to global variables');",
+									"    }",
+									"    if (response.refreshToken) {",
+									"        pm.globals.set('refreshToken', response.refreshToken);",
+									"        console.log('New refresh token saved to global variables');",
+									"    }",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"response": []
+				},
+				{
+					"name": "Sign Out",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{accessToken}}"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/signout",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"signout"
+							]
+						}
+					},
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Clear tokens from global variables after Sign Out",
+									"if (pm.response.code === 200 || pm.response.code === 204) {",
+									"    pm.globals.unset('accessToken');",
+									"    pm.globals.unset('refreshToken');",
+									"    console.log('Tokens cleared from global variables after sign out');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"response": []
 				}
 			]
@@ -293,40 +377,11 @@
 			]
 		}
 	],
-	"event": [
-		{
-			"listen": "test",
-			"script": {
-				"exec": [
-					"// Extract tokens from authentication responses",
-					"if (pm.response.code === 200 || pm.response.code === 201) {",
-					"    const response = pm.response.json();",
-					"    if (response.accessToken) {",
-					"        pm.environment.set('accessToken', response.accessToken);",
-					"    }",
-					"    if (response.refreshToken) {",
-					"        pm.environment.set('refreshToken', response.refreshToken);",
-					"    }",
-					"}"
-				],
-				"type": "text/javascript"
-			}
-		}
-	],
+
 	"variable": [
 		{
 			"key": "baseUrl",
 			"value": "http://localhost:8080",
-			"type": "string"
-		},
-		{
-			"key": "accessToken",
-			"value": "",
-			"type": "string"
-		},
-		{
-			"key": "refreshToken",
-			"value": "",
 			"type": "string"
 		}
 	]
