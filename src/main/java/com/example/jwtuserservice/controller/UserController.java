@@ -17,7 +17,7 @@ import java.util.List;
 @CrossOrigin(origins = "*")
 public class UserController {
 
-    // Test
+    // Test here
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     
     @Autowired
